@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <title>Media Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        div {
+            text-align: center;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .media {
+            width: 60%;
+            height: 90vh;
+            background-size: cover;
+            background-position: center;
+            background-image: url(cat.jpg);
+            margin: 20px auto;
+            border: 3px solid black;
+            border-radius: 27px;
+            position: relative;
+            background-position: center;
+            transition: all 0.5s ease-in;
+
+            &:hover {
+                /* transform: scale(1.05); */
+                box-shadow: 16px 16px 48px black;
+            }
+        }
+
+        #playPause,
+        #pre,
+        #Next,
+        #replay {
+            border: 2px solid black;
+            margin: 3px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.1s ease-in;
+
+            &:hover {
+                transform: scale(1.1);
+                box-shadow: 4px 4px 16px rgb(66, 66, 66);
+            }
+        }
+
+        #playPause:hover {
+            background-color: #d73c3c;
+        }
+
+        #pre:hover {
+            background-color: #5b3cd7;
+        }
+
+        #Next:hover {
+            background-color: #3cd772;
+        }
+
+        #replay:hover {
+            background-color: #a700cd;
+        }
+
+        #btn {
+            text-align: center;
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+        }
+
+        #progress-bar {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 90%;
+            bottom: 25%;
+
+        }
+
+        #progress-bar-fill {
+            width: 0;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .media {
+                width: 90%;
+                height: 80vh;
+            }
+
+            #progress-bar {
+                width: 90%;
+                bottom: 25%;
+            }
+
+            #playPause,
+            #pre,
+            #Next,
+            #replay {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media only screen and (max-width: 480px) {
+            .media {
+                width: 95%;
+                height: 90vh;
+            }
+
+            #progress-bar {
+                width: 90%;
+                bottom: 20%;
+            }
+
+            #playPause,
+            #pre,
+            #Next,
+            #replay {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="media">
+        <audio id="audio" src="Señorita.mp3"></audio>
+
+        <div id="btn">
+            <button id="pre"><i class="fas fa-step-backward"></i></button>
+            <button id="playPause"><i class="fas fa-play" id="play-icon"></i><i class="fas fa-pause" id="pause-icon"
+                    style="display: none;"></i></button>
+            <button id="replay"><i class="fas fa-redo-alt"></i></button>
+            <button id="Next"><i class="fas fa-step-forward"></i></button>
+        </div>
+        <div id="progress-bar">
+            <div id="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const playButton = document.getElementById('playPause');
+        const preButton = document.getElementById('pre');
+        const nextButton = document.getElementById('Next');
+        const replayButton = document.getElementById('replay');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+
+        playButton.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('play-icon').style.display = 'none';
+                document.getElementById('pause-icon').style.display = 'block';
+            } else {
+                audio.pause();
+                document.getElementById('play-icon').style.display = 'block';
+                document.getElementById('pause-icon').style.display = 'none';
+            }
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBarFill.style.width = `${progress}%`;
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const progress = (e.offsetX / progressBar.offsetWidth) * audio.duration;
+            audio.currentTime = progress;
+        });
+
+        preButton.addEventListener('click', () => {
+            audio.currentTime = 0;
+        });
+
+        replayButton.addEventListener('click', () => {
+            audio.currentTime = 0;
+            audio.play();
+        });
+
+        nextButton.addEventListener('click', () => {
+            audio.currentTime = audio.duration;
+        });
+    </script>
+
+</body>
+
+</html>
